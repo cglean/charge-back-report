@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre1.8.0_92">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.server.core.container/org.eclipse.jst.server.tomcat.runtimeTarget/Apache Tomcat v8.0">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.web"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/aopalliance-1.0.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/cloudfoundry-client-lib-1.1.4.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/commons-io-2.5.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/httpclient-4.5.2.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/httpcore-4.4.5.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/jackson-annotations-2.8.1.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/jackson-core-2.8.1.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/jackson-core-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/jackson-databind-2.8.1.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/jackson-mapper-asl-1.9.13.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/protobuf-java-3.0.0-beta-4.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-aop-4.3.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-beans-4.3.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-context-4.3.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-core-4.3.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-expression-4.3.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-security-config-4.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-security-core-4.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-security-oauth2-2.0.10.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-security-web-4.1.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-web-4.3.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/spring-webmvc-4.3.1.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/tomcat-embed-core-9.0.0.M9.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/tomcat-embed-websocket-9.0.0.M9.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/tomcat-juli-9.0.0.M9.jar"/>
+	<classpathentry kind="lib" path="D:/Users/dsanghav/Downloads/Sample/yamlbeans-1.09.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
