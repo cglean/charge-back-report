@@ -32,74 +32,166 @@
         client.login();
         
         
-        %>
-	<h2>Spaces:</h2>
-	<ul>
-		<%
-        for (CloudSpace space : client.getSpaces()) {
-        	%>
-		<li>
-			<%
-            
-        	out.println(space.getName());
-        	%>
-		</li>
-		<%
+        Integer memoryquota = (int) client.getQuotaByName("trial", true).getMemoryLimit();
+        List<Integer> diskquota = new ArrayList<Integer>();
+        
+        List<Integer> diskconsumed = new ArrayList<Integer>();
+        List<Integer> memoryconsumed = new ArrayList<Integer>();
+        List<Integer> cpuconsumed = new ArrayList<Integer>();
+        List<String> appname = new ArrayList<String>();
+        int a = 0;
+        System.out.println(client);
+        System.out.println(client.getApplications().size());
+        
+        for (CloudApplication app : client.getApplications()) {
+        	appname.add(a, app.getName());
+        	diskquota.add(a, app.getDiskQuota());
+        	cpuconsumed.add((int) client.getApplicationStats(app.getName()).getRecords().get(0).getUsage().getCpu());
+        	diskconsumed.add((int)((client.getApplicationStats(app.getName()).getRecords().get(0).getUsage().getDisk())/1024)/1024);
+        	memoryconsumed.add((int)((client.getApplicationStats(app.getName()).getRecords().get(0).getUsage().getMem())/1024)/1024);
+        	
+        	a++;
+        }
+        a=0;
+        out.println(memoryquota);
+        out.println(appname);
+        out.println(diskquota);
+        out.println(cpuconsumed);
+        out.println(diskconsumed);
+        out.println(memoryconsumed);
+        
+        String label = "\"Unutilised\"";
+        for (String app : appname) {
+        	label = label + ",\""+app+"\"";
+        }
+        String memoryU = "";
+        int c = 0;
+        Integer memoryfree = memoryquota;
+        for (Integer mem : memoryconsumed) {
+        	memoryfree = memoryfree - mem;
+        	memoryU = memoryU + mem;
+        	if(c<memoryconsumed.size()-1){
+        		memoryU = memoryU + ",";
+        	}
+        	c++;
         }
         
+        String memory =memoryfree.toString();
+        for (Integer mem : memoryconsumed) {
+        	memory = memory + ","+mem.toString();
+        }
+        
+        String applabel = "";
+        int b = 0;
+        for (String apps : appname) {
+        	applabel = applabel + "\""+apps+"\"";
+        	if(b<appname.size()-1){
+        		applabel = applabel + ",";
+        	}
+        	b++;
+        }
+        b = 0;
+        
+        
+        
+        
         %>
-
-	</ul>
-	<h2>Applications:</h2>
-	<br />
-	<%
-	for (CloudApplication app : client.getApplications()) {
-		
-		out.println(app.getName()+"<br />");
-		%>
-		
-		<canvas id="<%out.print(app.getName());%>" width="200px" height="400px"></canvas>
-		<script>
-		var a="<%out.print(client.getApplicationStats(app.getName()).getRecords().get(0).getUsage().getDisk());%>";
-		a = (a/1024)/1024
-		var b="<%out.print(client.getApplicationStats(app.getName()).getRecords().get(0).getDiskQuota());%>";
-		b = (b/1024)/1024
-		var ctx = document.getElementById("<%out.print(app.getName());%>");
-		var myChart = new Chart(ctx, {
-		    type: 'bar',
-		    data: {
-		        labels: ["Allotted", "Consumed"],
-		        datasets: [{
-		            label: 'Disk Quota',
-		            data: [b, a],
-		            backgroundColor: [
-		                'rgba(255, 99, 132, 0.2)',
-		                'rgba(54, 162, 235, 0.2)'
-		            ],
-		            borderColor: [
-		                'rgba(255,99,132,1)',
-		                'rgba(54, 162, 235, 1)'
-		            ],
-		            borderWidth: 1
-		        }]
-		    },
-		    options: {
+        <br />
+        
+        <table>
+        <tr>
+        <th colspan="2">
+        <h2>Memory Consumption:</h2>
+        </th>
+        <th colspan="2">
+        <h2>CPU Consumption:</h2>
+        </th>
+        
+        </tr>
+        <tr>
+        <th>
+        Unutilised Memory
+        </th>
+        <th>
+        Utilised Memory
+        </th>
+        <th>
+        Unutilised CPU
+        </th>
+        <th>
+        Utilised CPU
+        </th>
+        </tr>
+        <tr>
+        <td>
+        <canvas id="memory" width="200px" height="400px"></canvas>
+        </td>
+        <td>
+        <canvas id="memory2" width="200px" height="400px"></canvas>
+        </td>
+        </tr>
+        </table>
+        <script type="text/javascript">
+        var ctx = document.getElementById("memory");
+        var data = {
+        	    labels: [
+					<%out.print(label);%>
+        	    ],
+        	    datasets: [
+        	        {
+        	        	data: [<%out.print(memory);%>],
+        	            backgroundColor: [
+        	                "#008000",
+        	                "#36A2EB",
+        	                "#FFCE56"
+        	            ],
+        	            hoverBackgroundColor: [
+        	                "#FF6384",
+        	                "#36A2EB",
+        	                "#FFCE56"
+        	            ]
+        	        }]
+        	};
+        
+        var myPieChart = new Chart(ctx,{
+            type: 'pie',
+            data: data,
+            options: {
 		        responsive: false
 		    }
-		});
-		</script>
-		
-		
-		
-		<%
-		
-	}
-	
-	%>
-
-	
-
-
-
+        });
+        var ctx = document.getElementById("memory2");
+        var data = {
+        	    labels: [
+					<%out.print(applabel);%>
+        	    ],
+        	    datasets: [
+        	        {
+        	        	data: [<%out.print(memoryU);%>],
+        	            backgroundColor: [
+        	                "#FF6384",
+        	                "#36A2EB",
+        	                "#FFCE56"
+        	            ],
+        	            hoverBackgroundColor: [
+        	                "#FF6384",
+        	                "#36A2EB",
+        	                "#FFCE56"
+        	            ]
+        	        }]
+        	};
+        
+        var myPieChart = new Chart(ctx,{
+            type: 'pie',
+            data: data,
+            options: {
+		        responsive: false
+		    }
+        });
+        
+        </script>
+        
+        
+   
 </body>
 </html>
