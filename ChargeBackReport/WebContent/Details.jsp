@@ -4,7 +4,7 @@
 <%@ page
 	import="org.cloudfoundry.client.lib.CloudCredentials, org.cloudfoundry.client.lib.CloudFoundryClient, org.cloudfoundry.client.lib.StartingInfo, org.cloudfoundry.client.lib.domain.CloudApplication, org.cloudfoundry.client.lib.domain.CloudOrganization, org.cloudfoundry.client.lib.domain.CloudService, org.cloudfoundry.client.lib.domain.CloudSpace, org.cloudfoundry.client.lib.domain.InstanceInfo, org.cloudfoundry.client.lib.domain.InstanceStats"%>
 <%@ page
-	import=" java.net.MalformedURLException, java.net.URI, java.net.URL, java.util.ArrayList, java.util.List"%>
+	import="java.text.DecimalFormat, java.net.MalformedURLException, java.net.URI, java.net.URL, java.util.ArrayList, java.util.List"%>
 
 <html>
 <head>
@@ -19,13 +19,16 @@
 </head>
 <body>
 
-	<h1>Welcome to Pivotal Cloud Services</h1>
-	<br />
+	<h1 style="margin: 0px;">Welcome to Pivotal Cloud Services</h1>
+	
 
 	<%
         String target = request.getParameter("url");
         String user = request.getParameter("username");
         String password = request.getParameter("password");
+        
+        DecimalFormat df=new DecimalFormat("0.000000");
+         
         
         CloudCredentials credentials = new CloudCredentials(user, password);
         CloudFoundryClient client = new CloudFoundryClient(credentials, URI.create(target).toURL());
@@ -37,28 +40,27 @@
         
         List<Integer> diskconsumed = new ArrayList<Integer>();
         List<Integer> memoryconsumed = new ArrayList<Integer>();
-        List<Integer> cpuconsumed = new ArrayList<Integer>();
+        List<Double> cpuconsumed = new ArrayList<Double>();
         List<String> appname = new ArrayList<String>();
         int a = 0;
-        System.out.println(client);
-        System.out.println(client.getApplications().size());
+        
         
         for (CloudApplication app : client.getApplications()) {
         	appname.add(a, app.getName());
         	diskquota.add(a, app.getDiskQuota());
-        	cpuconsumed.add((int) client.getApplicationStats(app.getName()).getRecords().get(0).getUsage().getCpu());
+        	cpuconsumed.add( client.getApplicationStats(app.getName()).getRecords().get(0).getUsage().getCpu());
         	diskconsumed.add((int)((client.getApplicationStats(app.getName()).getRecords().get(0).getUsage().getDisk())/1024)/1024);
         	memoryconsumed.add((int)((client.getApplicationStats(app.getName()).getRecords().get(0).getUsage().getMem())/1024)/1024);
         	
         	a++;
         }
         a=0;
-        out.println(memoryquota);
+        /*out.println(memoryquota);
         out.println(appname);
         out.println(diskquota);
         out.println(cpuconsumed);
         out.println(diskconsumed);
-        out.println(memoryconsumed);
+        out.println(memoryconsumed);*/
         
         String label = "\"Unutilised\"";
         for (String app : appname) {
@@ -75,7 +77,7 @@
         	}
         	c++;
         }
-        
+        c=0;
         String memory =memoryfree.toString();
         for (Integer mem : memoryconsumed) {
         	memory = memory + ","+mem.toString();
@@ -92,11 +94,26 @@
         }
         b = 0;
         
-        
-        
-        
+        String cpu;
+        Double cpufree = 100.0;
+        for (Double cpucon : cpuconsumed) {
+        	cpufree = cpufree - cpucon;
+        }
+        //cpu = cpufree.toString();
+        cpu = df.format(cpufree); 
+        String cpuU = "";
+        int d = 0;
+        for (Double cpucon : cpuconsumed) {
+        	cpu = cpu + "," + df.format(cpucon);;
+        	cpuU = cpuU + df.format(cpucon);
+        	if(d<cpuconsumed.size()-1){
+        		cpuU = cpuU + ",";
+        	}
+        	d++;
+        }
+        d = 0;
         %>
-        <br />
+        
         
         <table>
         <tr>
@@ -128,6 +145,12 @@
         </td>
         <td>
         <canvas id="memory2" width="200px" height="400px"></canvas>
+        </td>
+        <td>
+        <canvas id="cpu" width="200px" height="400px"></canvas>
+        </td>
+        <td>
+        <canvas id="cpu1" width="200px" height="400px"></canvas>
         </td>
         </tr>
         </table>
@@ -168,6 +191,64 @@
         	    datasets: [
         	        {
         	        	data: [<%out.print(memoryU);%>],
+        	            backgroundColor: [
+        	                "#FF6384",
+        	                "#36A2EB",
+        	                "#FFCE56"
+        	            ],
+        	            hoverBackgroundColor: [
+        	                "#FF6384",
+        	                "#36A2EB",
+        	                "#FFCE56"
+        	            ]
+        	        }]
+        	};
+        
+        var myPieChart = new Chart(ctx,{
+            type: 'pie',
+            data: data,
+            options: {
+		        responsive: false
+		    }
+        });
+        
+        var ctx = document.getElementById("cpu");
+        var data = {
+        	    labels: [
+					<%out.print(label);%>
+        	    ],
+        	    datasets: [
+        	        {
+        	        	data: [<%out.print(cpu);%>],
+        	            backgroundColor: [
+        	                "#FF6384",
+        	                "#36A2EB",
+        	                "#FFCE56"
+        	            ],
+        	            hoverBackgroundColor: [
+        	                "#FF6384",
+        	                "#36A2EB",
+        	                "#FFCE56"
+        	            ]
+        	        }]
+        	};
+        
+        var myPieChart = new Chart(ctx,{
+            type: 'pie',
+            data: data,
+            options: {
+		        responsive: false
+		    }
+        });
+        
+        var ctx = document.getElementById("cpu1");
+        var data = {
+        	    labels: [
+					<%out.print(applabel);%>
+        	    ],
+        	    datasets: [
+        	        {
+        	        	data: [<%out.print(cpuU);%>],
         	            backgroundColor: [
         	                "#FF6384",
         	                "#36A2EB",
